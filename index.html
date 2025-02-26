@@ -71,6 +71,26 @@
       <button id="testButton">Test Coordinates</button>
       <p id="testResult"></p>
     </div>
+
+    <div class="manual-test">
+      <h2>Test Proximity to Coit Tower</h2>
+      <div class="input-group">
+        <label for="coitTowerRadius">Radius (meters):</label>
+        <input type="number" id="coitTowerRadius" value="200">
+      </div>
+      <button id="coitTowerButton">Test Distance to Coit Tower</button>
+      <p id="coitTowerResult"></p>
+    </div>
+
+    <div class="manual-test">
+      <h2>Test Proximity to Slippery Fish</h2>
+      <div class="input-group">
+        <label for="slipperyFishRadius">Radius (meters):</label>
+        <input type="number" id="slipperyFishRadius" value="200">
+      </div>
+      <button id="slipperyFishButton">Test Distance to Slippery Fish</button>
+      <p id="slipperyFishResult"></p>
+    </div>
     <script>
       // Set your target lat/lng (e.g., the school’s location):
       const targetLat = 37.78787850657796;
@@ -161,6 +181,80 @@
           testResult.innerText = "Error parsing coordinates. Please use format: latitude, longitude";
           testResult.style.color = "#dc3545";
         }
+      });
+
+      // Coit Tower test
+      document.getElementById("coitTowerButton").addEventListener("click", function() {
+        const coitTowerLat = 37.80260256231614;
+        const coitTowerLng = -122.40586511894922;
+        const testRadius = parseFloat(document.getElementById("coitTowerRadius").value);
+        const testResult = document.getElementById("coitTowerResult");
+        
+        // Get user's current position
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+            
+            // Calculate distance
+            const distance = getDistanceFromLatLng(
+              userLat,
+              userLng,
+              coitTowerLat,
+              coitTowerLng
+            );
+            
+            // Check if within the specified radius
+            if (distance <= testRadius) {
+              testResult.innerText = `Success! You are within ${testRadius}m of Coit Tower (approx. ${Math.round(distance)}m away).`;
+              testResult.style.color = "#28a745";
+            } else {
+              testResult.innerText = `You are too far from Coit Tower (approx. ${Math.round(distance)}m away).`;
+              testResult.style.color = "#dc3545";
+            }
+          },
+          (error) => {
+            testResult.innerText = "Location access denied or unavailable.";
+            testResult.style.color = "#dc3545";
+          }
+        );
+      });
+
+      // Slippery Fish test
+      document.getElementById("slipperyFishButton").addEventListener("click", function() {
+        const slipperyFishLat = 37.71437250538696;
+        const slipperyFishLng = -122.48131949996875;
+        const testRadius = parseFloat(document.getElementById("slipperyFishRadius").value);
+        const testResult = document.getElementById("slipperyFishResult");
+        
+        // Get user's current position
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+            
+            // Calculate distance
+            const distance = getDistanceFromLatLng(
+              userLat,
+              userLng,
+              slipperyFishLat,
+              slipperyFishLng
+            );
+            
+            // Check if within the specified radius
+            if (distance <= testRadius) {
+              testResult.innerText = `Success! You are within ${testRadius}m of Slippery Fish (approx. ${Math.round(distance)}m away).`;
+              testResult.style.color = "#28a745";
+            } else {
+              testResult.innerText = `You are too far from Slippery Fish (approx. ${Math.round(distance)}m away).`;
+              testResult.style.color = "#dc3545";
+            }
+          },
+          (error) => {
+            testResult.innerText = "Location access denied or unavailable.";
+            testResult.style.color = "#dc3545";
+          }
+        );
       });
     </script>
   </body>

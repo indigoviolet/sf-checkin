@@ -62,8 +62,8 @@
     <div class="manual-test">
       <h2>Manual Coordinate Test</h2>
       <div class="input-group">
-        <label for="coordinates">Coordinates (latitude, longitude):</label>
-        <input type="text" id="coordinates" placeholder="37.78787850657796, -122.40430611754073">
+        <label for="coordinates">Target Coordinates (latitude, longitude):</label>
+        <input type="text" id="coordinates" placeholder="Enter target location coordinates">
       </div>
       <div class="input-group">
         <label for="testRadius">Radius (meters):</label>
@@ -159,31 +159,44 @@
         const testRadius = parseFloat(document.getElementById("testRadius").value);
         const testResult = document.getElementById("testResult");
         
-        // Parse coordinates from input
+        // Parse target coordinates from input
         try {
-          const [userLat, userLng] = coordinatesInput.split(",").map(coord => parseFloat(coord.trim()));
+          const [targetLat, targetLng] = coordinatesInput.split(",").map(coord => parseFloat(coord.trim()));
           
-          if (isNaN(userLat) || isNaN(userLng)) {
+          if (isNaN(targetLat) || isNaN(targetLng)) {
             testResult.innerText = "Invalid coordinates format. Please use: latitude, longitude";
+            testResult.style.color = "#dc3545";
             return;
           }
           
-          // Calculate distance
-          const distance = getDistanceFromLatLng(
-            userLat,
-            userLng,
-            targetLat,
-            targetLng
+          // Get user's current position
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const userLat = position.coords.latitude;
+              const userLng = position.coords.longitude;
+              
+              // Calculate distance
+              const distance = getDistanceFromLatLng(
+                userLat,
+                userLng,
+                targetLat,
+                targetLng
+              );
+              
+              // Check if within the specified radius
+              if (distance <= testRadius) {
+                testResult.innerText = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(distance)}m away).`;
+                testResult.style.color = "#28a745";
+              } else {
+                testResult.innerText = `You are too far from the target (approx. ${Math.round(distance)}m away).`;
+                testResult.style.color = "#dc3545";
+              }
+            },
+            (error) => {
+              testResult.innerText = "Location access denied or unavailable.";
+              testResult.style.color = "#dc3545";
+            }
           );
-          
-          // Check if within the specified radius
-          if (distance <= testRadius) {
-            testResult.innerText = `Success! The coordinates are within ${testRadius}m of the target (approx. ${Math.round(distance)}m away).`;
-            testResult.style.color = "#28a745";
-          } else {
-            testResult.innerText = `The coordinates are too far from the target (approx. ${Math.round(distance)}m away).`;
-            testResult.style.color = "#dc3545";
-          }
         } catch (error) {
           testResult.innerText = "Error parsing coordinates. Please use format: latitude, longitude";
           testResult.style.color = "#dc3545";

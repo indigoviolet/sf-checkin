@@ -55,6 +55,7 @@
     <body>
         <h1>Geofence Demo</h1>
         <p id="currentCoordinates">Fetching your coordinates...</p>
+        <button id="refreshLocation">Refresh Location</button>
         <p id="targetCoordinates">
             Target coordinates: 37.78787850657796, -122.40430611754073
             <a
@@ -201,6 +202,18 @@
                         document.getElementById("testRadius").value,
                     );
                     const testResult = document.getElementById("testResult");
+                    
+                    if (locationError) {
+                        testResult.innerText = "Location access denied or unavailable.";
+                        testResult.style.color = "#dc3545";
+                        return;
+                    }
+                    
+                    if (userLat === null || userLng === null) {
+                        testResult.innerText = "Still fetching your location. Please try again in a moment.";
+                        testResult.style.color = "#dc3545";
+                        return;
+                    }
 
                     // Parse target coordinates from input
                     try {
@@ -215,39 +228,26 @@
                             return;
                         }
 
-                        // Get user's current position
-                        navigator.geolocation.getCurrentPosition(
-                            (position) => {
-                                const userLat = position.coords.latitude;
-                                const userLng = position.coords.longitude;
-
-                                // Calculate distance
-                                const distance = getDistanceFromLatLng(
-                                    userLat,
-                                    userLng,
-                                    targetLat,
-                                    targetLng,
-                                );
-
-                                // Check if within the specified radius
-                                if (distance <= testRadius) {
-                                    testResult.innerText = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(
-                                        distance,
-                                    )}m away).`;
-                                    testResult.style.color = "#28a745";
-                                } else {
-                                    testResult.innerText = `You are too far from the target (approx. ${Math.round(
-                                        distance,
-                                    )}m away).`;
-                                    testResult.style.color = "#dc3545";
-                                }
-                            },
-                            (error) => {
-                                testResult.innerText =
-                                    "Location access denied or unavailable.";
-                                testResult.style.color = "#dc3545";
-                            },
+                        // Calculate distance using stored location
+                        const distance = getDistanceFromLatLng(
+                            userLat,
+                            userLng,
+                            targetLat,
+                            targetLng,
                         );
+
+                        // Check if within the specified radius
+                        if (distance <= testRadius) {
+                            testResult.innerText = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(
+                                distance,
+                            )}m away).`;
+                            testResult.style.color = "#28a745";
+                        } else {
+                            testResult.innerText = `You are too far from the target (approx. ${Math.round(
+                                distance,
+                            )}m away).`;
+                            testResult.style.color = "#dc3545";
+                        }
                     } catch (error) {
                         testResult.innerText =
                             "Error parsing coordinates. Please use format: latitude, longitude";
@@ -267,39 +267,38 @@
                     const testResult =
                         document.getElementById("coitTowerResult");
 
-                    // Get user's current position
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const userLat = position.coords.latitude;
-                            const userLng = position.coords.longitude;
+                    if (locationError) {
+                        testResult.innerText = "Location access denied or unavailable.";
+                        testResult.style.color = "#dc3545";
+                        return;
+                    }
+                    
+                    if (userLat === null || userLng === null) {
+                        testResult.innerText = "Still fetching your location. Please try again in a moment.";
+                        testResult.style.color = "#dc3545";
+                        return;
+                    }
 
-                            // Calculate distance
-                            const distance = getDistanceFromLatLng(
-                                userLat,
-                                userLng,
-                                coitTowerLat,
-                                coitTowerLng,
-                            );
-
-                            // Check if within the specified radius
-                            if (distance <= testRadius) {
-                                testResult.innerText = `Success! You are within ${testRadius}m of Coit Tower (approx. ${Math.round(
-                                    distance,
-                                )}m away).`;
-                                testResult.style.color = "#28a745";
-                            } else {
-                                testResult.innerText = `You are too far from Coit Tower (approx. ${Math.round(
-                                    distance,
-                                )}m away).`;
-                                testResult.style.color = "#dc3545";
-                            }
-                        },
-                        (error) => {
-                            testResult.innerText =
-                                "Location access denied or unavailable.";
-                            testResult.style.color = "#dc3545";
-                        },
+                    // Calculate distance using stored location
+                    const distance = getDistanceFromLatLng(
+                        userLat,
+                        userLng,
+                        coitTowerLat,
+                        coitTowerLng,
                     );
+
+                    // Check if within the specified radius
+                    if (distance <= testRadius) {
+                        testResult.innerText = `Success! You are within ${testRadius}m of Coit Tower (approx. ${Math.round(
+                            distance,
+                        )}m away).`;
+                        testResult.style.color = "#28a745";
+                    } else {
+                        testResult.innerText = `You are too far from Coit Tower (approx. ${Math.round(
+                            distance,
+                        )}m away).`;
+                        testResult.style.color = "#dc3545";
+                    }
                 });
 
             // Slippery Fish test
@@ -314,39 +313,38 @@
                     const testResult =
                         document.getElementById("slipperyFishResult");
 
-                    // Get user's current position
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const userLat = position.coords.latitude;
-                            const userLng = position.coords.longitude;
+                    if (locationError) {
+                        testResult.innerText = "Location access denied or unavailable.";
+                        testResult.style.color = "#dc3545";
+                        return;
+                    }
+                    
+                    if (userLat === null || userLng === null) {
+                        testResult.innerText = "Still fetching your location. Please try again in a moment.";
+                        testResult.style.color = "#dc3545";
+                        return;
+                    }
 
-                            // Calculate distance
-                            const distance = getDistanceFromLatLng(
-                                userLat,
-                                userLng,
-                                slipperyFishLat,
-                                slipperyFishLng,
-                            );
-
-                            // Check if within the specified radius
-                            if (distance <= testRadius) {
-                                testResult.innerText = `Success! You are within ${testRadius}m of Slippery Fish (approx. ${Math.round(
-                                    distance,
-                                )}m away).`;
-                                testResult.style.color = "#28a745";
-                            } else {
-                                testResult.innerText = `You are too far from Slippery Fish (approx. ${Math.round(
-                                    distance,
-                                )}m away).`;
-                                testResult.style.color = "#dc3545";
-                            }
-                        },
-                        (error) => {
-                            testResult.innerText =
-                                "Location access denied or unavailable. ${error}";
-                            testResult.style.color = "#dc3545";
-                        },
+                    // Calculate distance using stored location
+                    const distance = getDistanceFromLatLng(
+                        userLat,
+                        userLng,
+                        slipperyFishLat,
+                        slipperyFishLng,
                     );
+
+                    // Check if within the specified radius
+                    if (distance <= testRadius) {
+                        testResult.innerText = `Success! You are within ${testRadius}m of Slippery Fish (approx. ${Math.round(
+                            distance,
+                        )}m away).`;
+                        testResult.style.color = "#28a745";
+                    } else {
+                        testResult.innerText = `You are too far from Slippery Fish (approx. ${Math.round(
+                            distance,
+                        )}m away).`;
+                        testResult.style.color = "#dc3545";
+                    }
                 });
         </script>
     </body>

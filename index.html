@@ -193,53 +193,9 @@
                 },
             );
 
-            // Refresh location button handler
+            // Refresh location button handler - just updates the UI with stored coordinates
             document.getElementById("refreshLocation").addEventListener("click", function() {
-                document.getElementById("currentCoordinates").innerText = "Fetching your coordinates...";
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        userLat = position.coords.latitude;
-                        userLng = position.coords.longitude;
-                        locationError = false;
-
-                        // Display current coordinates with Google Maps link
-                        document.getElementById("currentCoordinates").innerHTML =
-                            `Your current coordinates: ${userLat.toFixed(
-                                6,
-                            )}, ${userLng.toFixed(6)} 
-                 <a href="https://www.google.com/maps?q=${userLat},${userLng}" target="_blank">(View on Google Maps)</a>`;
-
-                        // Calculate distance
-                        const distance = getDistanceFromLatLng(
-                            userLat,
-                            userLng,
-                            targetLat,
-                            targetLng,
-                        );
-
-                        // Check if within the specified radius
-                        if (distance <= radiusInMeters) {
-                            document.getElementById("message").innerText =
-                                `You are within ${radiusInMeters}m of the target.`;
-                            document.getElementById("myLink").style.display =
-                                "inline-block";
-                        } else {
-                            document.getElementById("message").innerText =
-                                `You are too far from the target (approx. ${Math.round(
-                                    distance,
-                                )}m).`;
-                            document.getElementById("myLink").style.display = "none";
-                        }
-                    },
-                    (error) => {
-                        locationError = true;
-                        document.getElementById("message").innerText =
-                            "Location access denied or unavailable.";
-                        document.getElementById("currentCoordinates").innerText =
-                            "Unable to retrieve your coordinates.";
-                    },
-                );
+                updateLocationUI();
             });
 
             // Manual coordinate testing

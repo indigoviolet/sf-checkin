@@ -1,358 +1,359 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Geofence Demo</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 2em;
-            }
-            #myLink {
-                display: none;
-                margin-top: 1em;
-                padding: 0.5em 1em;
-                background-color: #007bff;
-                color: #fff;
-                text-decoration: none;
-                border-radius: 4px;
-            }
-            #myLink:hover {
-                background-color: #0056b3;
-            }
-            .input-group {
-                margin-bottom: 1em;
-            }
-            label {
-                display: block;
-                margin-bottom: 0.5em;
-            }
-            input {
-                padding: 0.5em;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-            button {
-                padding: 0.5em 1em;
-                background-color: #28a745;
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-            button:hover {
-                background-color: #218838;
-            }
-            .manual-test {
-                margin-top: 2em;
-                padding: 1em;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                background-color: #f8f9fa;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Geofence Demo</h1>
-        <p id="currentCoordinates">Fetching your coordinates...</p>
-        <button id="refreshLocation">Refresh Location</button>
-        <p id="targetCoordinates">
-            Target coordinates: 37.78787850657796, -122.40430611754073
-            <a
-                href="https://www.google.com/maps?q=37.78787850657796,-122.40430611754073"
-                target="_blank"
-                >(View on Google Maps)</a
-            >
-        </p>
-        <p id="message">Checking your location...</p>
-        <!-- A button or link that will be revealed only if within range -->
-        <a id="myLink" href="https://example.com" target="_blank"
-            >Access Form</a
+  <head>
+    <meta charset="utf-8" />
+    <title>Geofence Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2em;
+      }
+      #myLink {
+        display: none;
+        margin-top: 1em;
+        padding: 0.5em 1em;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+      #myLink:hover {
+        background-color: #0056b3;
+      }
+      .input-group {
+        margin-bottom: 1em;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5em;
+      }
+      input {
+        padding: 0.5em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 0.5em 1em;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .manual-test {
+        margin-top: 2em;
+        padding: 1em;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Geofence Demo</h1>
+    <p id="currentCoordinates">Fetching your coordinates...</p>
+    <button id="refreshLocation">Refresh Location</button>
+    <p id="targetCoordinates">
+      Target coordinates: 37.78787850657796, -122.40430611754073
+      <a
+        href="https://www.google.com/maps?q=37.78787850657796,-122.40430611754073"
+        target="_blank"
+        >(View on Google Maps)</a
+      >
+    </p>
+    <p id="message">Checking your location...</p>
+    <!-- A button or link that will be revealed only if within range -->
+    <a id="myLink" href="https://example.com" target="_blank">Access Form</a>
+
+    <div class="manual-test">
+      <h2>Manual Coordinate Test</h2>
+      <p>
+        (Get coordinates by right-clicking on a location pin on Google Maps)
+      </p>
+
+      <div class="input-group">
+        <label for="coordinates"
+          >Target Coordinates (latitude, longitude):</label
         >
+        <input
+          type="text"
+          id="coordinates"
+          placeholder="Enter target location coordinates"
+        />
+      </div>
+      <div class="input-group">
+        <label for="testRadius">Radius (meters):</label>
+        <input type="number" id="testRadius" value="200" />
+      </div>
+      <button id="testButton">Test Coordinates</button>
+      <p id="testResult"></p>
+    </div>
 
-        <div class="manual-test">
-            <h2>Manual Coordinate Test</h2>
-            <div class="input-group">
-                <label for="coordinates"
-                    >Target Coordinates (latitude, longitude):</label
-                >
-                <input
-                    type="text"
-                    id="coordinates"
-                    placeholder="Enter target location coordinates"
-                />
-            </div>
-            <div class="input-group">
-                <label for="testRadius">Radius (meters):</label>
-                <input type="number" id="testRadius" value="200" />
-            </div>
-            <button id="testButton">Test Coordinates</button>
-            <p id="testResult"></p>
-        </div>
+    <div class="manual-test">
+      <h2>Test Proximity to Coit Tower</h2>
+      <p>
+        Coordinates: 37.80260256231614, -122.40586511894922
+        <a
+          href="https://www.google.com/maps?q=37.80260256231614,-122.40586511894922"
+          target="_blank"
+          >(View on Google Maps)</a
+        >
+      </p>
+      <div class="input-group">
+        <label for="coitTowerRadius">Radius (meters):</label>
+        <input type="number" id="coitTowerRadius" value="200" />
+      </div>
+      <button id="coitTowerButton">Test Distance to Coit Tower</button>
+      <p id="coitTowerResult"></p>
+    </div>
 
-        <div class="manual-test">
-            <h2>Test Proximity to Coit Tower</h2>
-            <p>
-                Coordinates: 37.80260256231614, -122.40586511894922
-                <a
-                    href="https://www.google.com/maps?q=37.80260256231614,-122.40586511894922"
-                    target="_blank"
-                    >(View on Google Maps)</a
-                >
-            </p>
-            <div class="input-group">
-                <label for="coitTowerRadius">Radius (meters):</label>
-                <input type="number" id="coitTowerRadius" value="200" />
-            </div>
-            <button id="coitTowerButton">Test Distance to Coit Tower</button>
-            <p id="coitTowerResult"></p>
-        </div>
+    <div class="manual-test">
+      <h2>Test Proximity to Slippery Fish</h2>
+      <p>
+        Coordinates: 37.71437250538696, -122.48131949996875
+        <a
+          href="https://www.google.com/maps?q=37.71437250538696,-122.48131949996875"
+          target="_blank"
+          >(View on Google Maps)</a
+        >
+      </p>
+      <div class="input-group">
+        <label for="slipperyFishRadius">Radius (meters):</label>
+        <input type="number" id="slipperyFishRadius" value="200" />
+      </div>
+      <button id="slipperyFishButton">Test Distance to Slippery Fish</button>
+      <p id="slipperyFishResult"></p>
+    </div>
+    <script>
+      // Set your target lat/lng (e.g., the school’s location):
+      let locationError = false;
+      const targetLat = 37.78787850657796;
+      const targetLng = -122.40430611754073;
+      const radiusInMeters = 200; // Distance threshold (e.g., 200 meters)
 
-        <div class="manual-test">
-            <h2>Test Proximity to Slippery Fish</h2>
-            <p>
-                Coordinates: 37.71437250538696, -122.48131949996875
-                <a
-                    href="https://www.google.com/maps?q=37.71437250538696,-122.48131949996875"
-                    target="_blank"
-                    >(View on Google Maps)</a
-                >
-            </p>
-            <div class="input-group">
-                <label for="slipperyFishRadius">Radius (meters):</label>
-                <input type="number" id="slipperyFishRadius" value="200" />
-            </div>
-            <button id="slipperyFishButton">
-                Test Distance to Slippery Fish
-            </button>
-            <p id="slipperyFishResult"></p>
-        </div>
-        <script>
-            // Set your target lat/lng (e.g., the school’s location):
-            let locationError = false;
-            const targetLat = 37.78787850657796;
-            const targetLng = -122.40430611754073;
-            const radiusInMeters = 200; // Distance threshold (e.g., 200 meters)
+      // Haversine formula to compute distance between two lat/lng points in meters:
+      function getDistanceFromLatLng(lat1, lng1, lat2, lng2) {
+        const R = 6371e3; // Earth's radius in meters
+        const rad = Math.PI / 180;
+        const dLat = (lat2 - lat1) * rad;
+        const dLng = (lng2 - lng1) * rad;
 
-            // Haversine formula to compute distance between two lat/lng points in meters:
-            function getDistanceFromLatLng(lat1, lng1, lat2, lng2) {
-                const R = 6371e3; // Earth's radius in meters
-                const rad = Math.PI / 180;
-                const dLat = (lat2 - lat1) * rad;
-                const dLng = (lng2 - lng1) * rad;
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * rad) *
+            Math.cos(lat2 * rad) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
 
-                const a =
-                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(lat1 * rad) *
-                        Math.cos(lat2 * rad) *
-                        Math.sin(dLng / 2) *
-                        Math.sin(dLng / 2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                return R * c;
-            }
+      // Ask for the user’s current location
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userLat = position.coords.latitude;
+          userLng = position.coords.longitude;
 
-            // Ask for the user’s current location
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    userLat = position.coords.latitude;
-                    userLng = position.coords.longitude;
-
-                    // Display current coordinates with Google Maps link
-                    document.getElementById("currentCoordinates").innerHTML =
-                        `Your current coordinates: ${userLat.toFixed(
-                            6,
-                        )}, ${userLng.toFixed(6)} 
+          // Display current coordinates with Google Maps link
+          document.getElementById("currentCoordinates").innerHTML =
+            `Your current coordinates: ${userLat.toFixed(6)}, ${userLng.toFixed(
+              6,
+            )} 
              <a href="https://www.google.com/maps?q=${userLat},${userLng}" target="_blank">(View on Google Maps)</a>`;
 
-                    // Calculate distance
-                    const distance = getDistanceFromLatLng(
-                        userLat,
-                        userLng,
-                        targetLat,
-                        targetLng,
-                    );
+          // Calculate distance
+          const distance = getDistanceFromLatLng(
+            userLat,
+            userLng,
+            targetLat,
+            targetLng,
+          );
 
-                    // Check if within the specified radius
-                    if (distance <= radiusInMeters) {
-                        document.getElementById("message").innerText =
-                            `You are within ${radiusInMeters}m of the target.`;
-                        document.getElementById("myLink").style.display =
-                            "inline-block";
-                    } else {
-                        document.getElementById("message").innerText =
-                            `You are too far from the target (approx. ${Math.round(
-                                distance,
-                            )}m).`;
-                    }
-                },
-                (error) => {
-                    locationError = true;
-                    document.getElementById("message").innerText =
-                        "Location access denied or unavailable.";
-                    document.getElementById("currentCoordinates").innerText =
-                        "Unable to retrieve your coordinates.";
-                },
+          // Check if within the specified radius
+          if (distance <= radiusInMeters) {
+            document.getElementById("message").innerText =
+              `You are within ${radiusInMeters}m of the target.`;
+            document.getElementById("myLink").style.display = "inline-block";
+          } else {
+            document.getElementById("message").innerText =
+              `You are too far from the target (approx. ${Math.round(
+                distance,
+              )}m).`;
+          }
+        },
+        (error) => {
+          locationError = true;
+          document.getElementById("message").innerText =
+            "Location access denied or unavailable.";
+          document.getElementById("currentCoordinates").innerText =
+            "Unable to retrieve your coordinates.";
+        },
+      );
+
+      // Refresh location button handler
+      document
+        .getElementById("refreshLocation")
+        .addEventListener("click", function () {
+          updateLocationUI();
+        });
+
+      // Manual coordinate testing
+      document
+        .getElementById("testButton")
+        .addEventListener("click", function () {
+          const coordinatesInput = document.getElementById("coordinates").value;
+          const testRadius = parseFloat(
+            document.getElementById("testRadius").value,
+          );
+          const testResult = document.getElementById("testResult");
+
+          if (locationError) {
+            testResult.innerText = "Location access denied or unavailable.";
+            testResult.style.color = "#dc3545";
+            return;
+          }
+
+          if (userLat === null || userLng === null) {
+            testResult.innerText =
+              "Still fetching your location. Please try again in a moment.";
+            testResult.style.color = "#dc3545";
+            return;
+          }
+
+          // Parse target coordinates from input
+          try {
+            const [targetLat, targetLng] = coordinatesInput
+              .split(",")
+              .map((coord) => parseFloat(coord.trim()));
+
+            if (isNaN(targetLat) || isNaN(targetLng)) {
+              testResult.innerText =
+                "Invalid coordinates format. Please use: latitude, longitude";
+              testResult.style.color = "#dc3545";
+              return;
+            }
+
+            // Calculate distance using stored location
+            const distance = getDistanceFromLatLng(
+              userLat,
+              userLng,
+              targetLat,
+              targetLng,
             );
 
-            // Refresh location button handler
-            document.getElementById("refreshLocation").addEventListener("click", function() {
-                updateLocationUI();
-            });
+            // Check if within the specified radius
+            if (distance <= testRadius) {
+              testResult.innerHTML = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(
+                distance,
+              )}m away). <a href="https://www.google.com/maps?q=${targetLat},${targetLng}" target="_blank">(View on Google Maps)</a>`;
+              testResult.style.color = "#28a745";
+            } else {
+              testResult.innerHTML = `You are too far from the target (approx. ${Math.round(
+                distance,
+              )}m away). <a href="https://www.google.com/maps?q=${targetLat},${targetLng}" target="_blank">(View on Google Maps)</a>`;
+              testResult.style.color = "#dc3545";
+            }
+          } catch (error) {
+            testResult.innerText =
+              "Error parsing coordinates. Please use format: latitude, longitude";
+            testResult.style.color = "#dc3545";
+          }
+        });
 
-            // Manual coordinate testing
-            document
-                .getElementById("testButton")
-                .addEventListener("click", function () {
-                    const coordinatesInput =
-                        document.getElementById("coordinates").value;
-                    const testRadius = parseFloat(
-                        document.getElementById("testRadius").value,
-                    );
-                    const testResult = document.getElementById("testResult");
-                    
-                    if (locationError) {
-                        testResult.innerText = "Location access denied or unavailable.";
-                        testResult.style.color = "#dc3545";
-                        return;
-                    }
-                    
-                    if (userLat === null || userLng === null) {
-                        testResult.innerText = "Still fetching your location. Please try again in a moment.";
-                        testResult.style.color = "#dc3545";
-                        return;
-                    }
+      // Coit Tower test
+      document
+        .getElementById("coitTowerButton")
+        .addEventListener("click", function () {
+          const coitTowerLat = 37.80260256231614;
+          const coitTowerLng = -122.40586511894922;
+          const testRadius = parseFloat(
+            document.getElementById("coitTowerRadius").value,
+          );
+          const testResult = document.getElementById("coitTowerResult");
 
-                    // Parse target coordinates from input
-                    try {
-                        const [targetLat, targetLng] = coordinatesInput
-                            .split(",")
-                            .map((coord) => parseFloat(coord.trim()));
+          if (locationError) {
+            testResult.innerText = "Location access denied or unavailable.";
+            testResult.style.color = "#dc3545";
+            return;
+          }
 
-                        if (isNaN(targetLat) || isNaN(targetLng)) {
-                            testResult.innerText =
-                                "Invalid coordinates format. Please use: latitude, longitude";
-                            testResult.style.color = "#dc3545";
-                            return;
-                        }
+          if (userLat === null || userLng === null) {
+            testResult.innerText =
+              "Still fetching your location. Please try again in a moment.";
+            testResult.style.color = "#dc3545";
+            return;
+          }
 
-                        // Calculate distance using stored location
-                        const distance = getDistanceFromLatLng(
-                            userLat,
-                            userLng,
-                            targetLat,
-                            targetLng,
-                        );
+          // Calculate distance using stored location
+          const distance = getDistanceFromLatLng(
+            userLat,
+            userLng,
+            coitTowerLat,
+            coitTowerLng,
+          );
 
-                        // Check if within the specified radius
-                        if (distance <= testRadius) {
-                            testResult.innerHTML = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(
-                                distance,
-                            )}m away). <a href="https://www.google.com/maps?q=${targetLat},${targetLng}" target="_blank">(View on Google Maps)</a>`;
-                            testResult.style.color = "#28a745";
-                        } else {
-                            testResult.innerHTML = `You are too far from the target (approx. ${Math.round(
-                                distance,
-                            )}m away). <a href="https://www.google.com/maps?q=${targetLat},${targetLng}" target="_blank">(View on Google Maps)</a>`;
-                            testResult.style.color = "#dc3545";
-                        }
-                    } catch (error) {
-                        testResult.innerText =
-                            "Error parsing coordinates. Please use format: latitude, longitude";
-                        testResult.style.color = "#dc3545";
-                    }
-                });
+          // Check if within the specified radius
+          if (distance <= testRadius) {
+            testResult.innerText = `Success! You are within ${testRadius}m of Coit Tower (approx. ${Math.round(
+              distance,
+            )}m away).`;
+            testResult.style.color = "#28a745";
+          } else {
+            testResult.innerText = `You are too far from Coit Tower (approx. ${Math.round(
+              distance,
+            )}m away).`;
+            testResult.style.color = "#dc3545";
+          }
+        });
 
-            // Coit Tower test
-            document
-                .getElementById("coitTowerButton")
-                .addEventListener("click", function () {
-                    const coitTowerLat = 37.80260256231614;
-                    const coitTowerLng = -122.40586511894922;
-                    const testRadius = parseFloat(
-                        document.getElementById("coitTowerRadius").value,
-                    );
-                    const testResult =
-                        document.getElementById("coitTowerResult");
+      // Slippery Fish test
+      document
+        .getElementById("slipperyFishButton")
+        .addEventListener("click", function () {
+          const slipperyFishLat = 37.71437250538696;
+          const slipperyFishLng = -122.48131949996875;
+          const testRadius = parseFloat(
+            document.getElementById("slipperyFishRadius").value,
+          );
+          const testResult = document.getElementById("slipperyFishResult");
 
-                    if (locationError) {
-                        testResult.innerText = "Location access denied or unavailable.";
-                        testResult.style.color = "#dc3545";
-                        return;
-                    }
-                    
-                    if (userLat === null || userLng === null) {
-                        testResult.innerText = "Still fetching your location. Please try again in a moment.";
-                        testResult.style.color = "#dc3545";
-                        return;
-                    }
+          if (locationError) {
+            testResult.innerText = "Location access denied or unavailable.";
+            testResult.style.color = "#dc3545";
+            return;
+          }
 
-                    // Calculate distance using stored location
-                    const distance = getDistanceFromLatLng(
-                        userLat,
-                        userLng,
-                        coitTowerLat,
-                        coitTowerLng,
-                    );
+          if (userLat === null || userLng === null) {
+            testResult.innerText =
+              "Still fetching your location. Please try again in a moment.";
+            testResult.style.color = "#dc3545";
+            return;
+          }
 
-                    // Check if within the specified radius
-                    if (distance <= testRadius) {
-                        testResult.innerText = `Success! You are within ${testRadius}m of Coit Tower (approx. ${Math.round(
-                            distance,
-                        )}m away).`;
-                        testResult.style.color = "#28a745";
-                    } else {
-                        testResult.innerText = `You are too far from Coit Tower (approx. ${Math.round(
-                            distance,
-                        )}m away).`;
-                        testResult.style.color = "#dc3545";
-                    }
-                });
+          // Calculate distance using stored location
+          const distance = getDistanceFromLatLng(
+            userLat,
+            userLng,
+            slipperyFishLat,
+            slipperyFishLng,
+          );
 
-            // Slippery Fish test
-            document
-                .getElementById("slipperyFishButton")
-                .addEventListener("click", function () {
-                    const slipperyFishLat = 37.71437250538696;
-                    const slipperyFishLng = -122.48131949996875;
-                    const testRadius = parseFloat(
-                        document.getElementById("slipperyFishRadius").value,
-                    );
-                    const testResult =
-                        document.getElementById("slipperyFishResult");
-
-                    if (locationError) {
-                        testResult.innerText = "Location access denied or unavailable.";
-                        testResult.style.color = "#dc3545";
-                        return;
-                    }
-                    
-                    if (userLat === null || userLng === null) {
-                        testResult.innerText = "Still fetching your location. Please try again in a moment.";
-                        testResult.style.color = "#dc3545";
-                        return;
-                    }
-
-                    // Calculate distance using stored location
-                    const distance = getDistanceFromLatLng(
-                        userLat,
-                        userLng,
-                        slipperyFishLat,
-                        slipperyFishLng,
-                    );
-
-                    // Check if within the specified radius
-                    if (distance <= testRadius) {
-                        testResult.innerText = `Success! You are within ${testRadius}m of Slippery Fish (approx. ${Math.round(
-                            distance,
-                        )}m away).`;
-                        testResult.style.color = "#28a745";
-                    } else {
-                        testResult.innerText = `You are too far from Slippery Fish (approx. ${Math.round(
-                            distance,
-                        )}m away).`;
-                        testResult.style.color = "#dc3545";
-                    }
-                });
-        </script>
-    </body>
+          // Check if within the specified radius
+          if (distance <= testRadius) {
+            testResult.innerText = `Success! You are within ${testRadius}m of Slippery Fish (approx. ${Math.round(
+              distance,
+            )}m away).`;
+            testResult.style.color = "#28a745";
+          } else {
+            testResult.innerText = `You are too far from Slippery Fish (approx. ${Math.round(
+              distance,
+            )}m away).`;
+            testResult.style.color = "#dc3545";
+          }
+        });
+    </script>
+  </body>
 </html>

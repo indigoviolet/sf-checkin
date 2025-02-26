@@ -20,6 +20,36 @@
       #myLink:hover {
         background-color: #0056b3;
       }
+      .input-group {
+        margin-bottom: 1em;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5em;
+      }
+      input {
+        padding: 0.5em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 0.5em 1em;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .manual-test {
+        margin-top: 2em;
+        padding: 1em;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+      }
     </style>
   </head>
   <body>
@@ -27,6 +57,20 @@
     <p id="message">Checking your location...</p>
     <!-- A button or link that will be revealed only if within range -->
     <a id="myLink" href="https://example.com" target="_blank">Access Form</a>
+    
+    <div class="manual-test">
+      <h2>Manual Coordinate Test</h2>
+      <div class="input-group">
+        <label for="coordinates">Coordinates (latitude, longitude):</label>
+        <input type="text" id="coordinates" placeholder="37.78787850657796, -122.40430611754073">
+      </div>
+      <div class="input-group">
+        <label for="testRadius">Radius (meters):</label>
+        <input type="number" id="testRadius" value="200">
+      </div>
+      <button id="testButton">Test Coordinates</button>
+      <p id="testResult"></p>
+    </div>
     <script>
       // Set your target lat/lng (e.g., the school’s location):
       const targetLat = 37.78787850657796;
@@ -81,6 +125,43 @@
             "Location access denied or unavailable.";
         },
       );
+
+      // Manual coordinate testing
+      document.getElementById("testButton").addEventListener("click", function() {
+        const coordinatesInput = document.getElementById("coordinates").value;
+        const testRadius = parseFloat(document.getElementById("testRadius").value);
+        const testResult = document.getElementById("testResult");
+        
+        // Parse coordinates from input
+        try {
+          const [userLat, userLng] = coordinatesInput.split(",").map(coord => parseFloat(coord.trim()));
+          
+          if (isNaN(userLat) || isNaN(userLng)) {
+            testResult.innerText = "Invalid coordinates format. Please use: latitude, longitude";
+            return;
+          }
+          
+          // Calculate distance
+          const distance = getDistanceFromLatLng(
+            userLat,
+            userLng,
+            targetLat,
+            targetLng
+          );
+          
+          // Check if within the specified radius
+          if (distance <= testRadius) {
+            testResult.innerText = `Success! The coordinates are within ${testRadius}m of the target (approx. ${Math.round(distance)}m away).`;
+            testResult.style.color = "#28a745";
+          } else {
+            testResult.innerText = `The coordinates are too far from the target (approx. ${Math.round(distance)}m away).`;
+            testResult.style.color = "#dc3545";
+          }
+        } catch (error) {
+          testResult.innerText = "Error parsing coordinates. Please use format: latitude, longitude";
+          testResult.style.color = "#dc3545";
+        }
+      });
     </script>
   </body>
 </html>

@@ -245,14 +245,14 @@
 
                         // Check if within the specified radius
                         if (distance <= testRadius) {
-                            testResult.innerText = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(
+                            testResult.innerHTML = `Success! You are within ${testRadius}m of the target (approx. ${Math.round(
                                 distance,
-                            )}m away).`;
+                            )}m away). <a href="https://www.google.com/maps?q=${targetLat},${targetLng}" target="_blank">(View on Google Maps)</a>`;
                             testResult.style.color = "#28a745";
                         } else {
-                            testResult.innerText = `You are too far from the target (approx. ${Math.round(
+                            testResult.innerHTML = `You are too far from the target (approx. ${Math.round(
                                 distance,
-                            )}m away).`;
+                            )}m away). <a href="https://www.google.com/maps?q=${targetLat},${targetLng}" target="_blank">(View on Google Maps)</a>`;
                             testResult.style.color = "#dc3545";
                         }
                     } catch (error) {

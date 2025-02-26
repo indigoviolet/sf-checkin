@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Geofence Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2em;
+      }
+      #myLink {
+        display: none;
+        margin-top: 1em;
+        padding: 0.5em 1em;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+      #myLink:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Geofence Demo</h1>
+    <p id="message">Checking your location...</p>
+    <!-- A button or link that will be revealed only if within range -->
+    <a id="myLink" href="https://example.com" target="_blank">Access Form</a>
+
+    <script>
+      // Set your target lat/lng (e.g., the school’s location):
+      const targetLat = 37.7749; // Example lat (San Francisco)
+      const targetLng = -122.4194; // Example lng
+      const radiusInMeters = 200; // Distance threshold (e.g., 200 meters)
+
+      // Haversine formula to compute distance between two lat/lng points in meters:
+      function getDistanceFromLatLng(lat1, lng1, lat2, lng2) {
+        const R = 6371e3; // Earth's radius in meters
+        const rad = Math.PI / 180;
+        const dLat = (lat2 - lat1) * rad;
+        const dLng = (lng2 - lng1) * rad;
+
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * rad) *
+            Math.cos(lat2 * rad) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
+
+      // Ask for the user’s current location
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          // Calculate distance
+          const distance = getDistanceFromLatLng(
+            userLat,
+            userLng,
+            targetLat,
+            targetLng,
+          );
+
+          // Check if within the specified radius
+          if (distance <= radiusInMeters) {
+            document.getElementById("message").innerText =
+              `You are within ${radiusInMeters}m of the target.`;
+            document.getElementById("myLink").style.display = "inline-block";
+          } else {
+            document.getElementById("message").innerText =
+              `You are too far from the target (approx. ${Math.round(
+                distance,
+              )}m).`;
+          }
+        },
+        (error) => {
+          document.getElementById("message").innerText =
+            "Location access denied or unavailable.";
+        },
+      );
+    </script>
+  </body>
+</html>

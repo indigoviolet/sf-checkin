@@ -55,6 +55,9 @@
   <body>
     <h1>Geofence Demo</h1>
     <p id="currentCoordinates">Fetching your coordinates...</p>
+    <p id="targetCoordinates">Target coordinates: 37.78787850657796, -122.40430611754073 
+      <a href="https://www.google.com/maps?q=37.78787850657796,-122.40430611754073" target="_blank">(View on Google Maps)</a>
+    </p>
     <p id="message">Checking your location...</p>
     <!-- A button or link that will be revealed only if within range -->
     <a id="myLink" href="https://example.com" target="_blank">Access Form</a>
@@ -75,6 +78,9 @@
 
     <div class="manual-test">
       <h2>Test Proximity to Coit Tower</h2>
+      <p>Coordinates: 37.80260256231614, -122.40586511894922 
+        <a href="https://www.google.com/maps?q=37.80260256231614,-122.40586511894922" target="_blank">(View on Google Maps)</a>
+      </p>
       <div class="input-group">
         <label for="coitTowerRadius">Radius (meters):</label>
         <input type="number" id="coitTowerRadius" value="200">
@@ -85,6 +91,9 @@
 
     <div class="manual-test">
       <h2>Test Proximity to Slippery Fish</h2>
+      <p>Coordinates: 37.71437250538696, -122.48131949996875
+        <a href="https://www.google.com/maps?q=37.71437250538696,-122.48131949996875" target="_blank">(View on Google Maps)</a>
+      </p>
       <div class="input-group">
         <label for="slipperyFishRadius">Radius (meters):</label>
         <input type="number" id="slipperyFishRadius" value="200">
@@ -121,9 +130,10 @@
           const userLat = position.coords.latitude;
           const userLng = position.coords.longitude;
           
-          // Display current coordinates
-          document.getElementById("currentCoordinates").innerText = 
-            `Your current coordinates: ${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
+          // Display current coordinates with Google Maps link
+          document.getElementById("currentCoordinates").innerHTML = 
+            `Your current coordinates: ${userLat.toFixed(6)}, ${userLng.toFixed(6)} 
+             <a href="https://www.google.com/maps?q=${userLat},${userLng}" target="_blank">(View on Google Maps)</a>`;
 
           // Calculate distance
           const distance = getDistanceFromLatLng(

@@ -54,6 +54,7 @@
   </head>
   <body>
     <h1>Geofence Demo</h1>
+    <p id="currentCoordinates">Fetching your coordinates...</p>
     <p id="message">Checking your location...</p>
     <!-- A button or link that will be revealed only if within range -->
     <a id="myLink" href="https://example.com" target="_blank">Access Form</a>
@@ -119,6 +120,10 @@
         (position) => {
           const userLat = position.coords.latitude;
           const userLng = position.coords.longitude;
+          
+          // Display current coordinates
+          document.getElementById("currentCoordinates").innerText = 
+            `Your current coordinates: ${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
 
           // Calculate distance
           const distance = getDistanceFromLatLng(
@@ -143,6 +148,8 @@
         (error) => {
           document.getElementById("message").innerText =
             "Location access denied or unavailable.";
+          document.getElementById("currentCoordinates").innerText =
+            "Unable to retrieve your coordinates.";
         },
       );
 
